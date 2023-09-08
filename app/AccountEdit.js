@@ -22,10 +22,8 @@ import axios from "axios";
 import { useAuthContext } from "../src/context/AuthContext";
 import { useFormik } from "formik";
 
-const Register = () => {
-  const [gender, setGender] = React.useState(false);
-  const { Register, Loading } = useAuthContext();
-  const router = useRouter();
+const AccountEdit = () => {
+  const { updateProfile, Loading, userInfo } = useAuthContext();
 
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().required("Full Name is required"),
@@ -36,22 +34,22 @@ const Register = () => {
     phoneNumber: Yup.string().required("Phone Number is required"),
     gender: Yup.string().required("Gender is required"),
     age: Yup.string().required("Age is required"),
-    password: Yup.string().required("Password is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      phoneNumber: "",
-      age: "",
-      gender: "",
+      id: userInfo?.id,
+      firstName: userInfo?.first_name,
+      lastName: userInfo?.last_name,
+      email: userInfo?.email,
+      phoneNumber: userInfo?.phone_number,
+      age: userInfo?.age,
+      gender: userInfo?.gender,
       password: "",
     },
     validationSchema,
     onSubmit: (values) => {
-      Register(values);
+      updateProfile(values);
     },
   });
 
@@ -60,7 +58,7 @@ const Register = () => {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="flex-1 p-4 px-6">
           <Text className="font-Poppins_500 text-lg mt-2">
-            Fill in your info
+            Update your account
           </Text>
           <View className="w-full mt-4">
             <TextInput
@@ -74,9 +72,7 @@ const Register = () => {
               error={formik.touched.firstName && formik.errors.firstName}
             />
             {formik.touched.firstName && formik.errors.firstName && (
-              <Text
-                className="text-xs font-Poppins_400 text-red-500"
-              >
+              <Text className="text-xs font-Poppins_400 text-red-500">
                 {formik.errors.firstName}
               </Text>
             )}
@@ -93,9 +89,7 @@ const Register = () => {
               error={formik.touched.lastName && formik.errors.lastName}
             />
             {formik.touched.lastName && formik.errors.lastName && (
-              <Text
-                className="text-xs font-Poppins_400 text-red-500"
-              >
+              <Text className="text-xs font-Poppins_400 text-red-500">
                 {formik.errors.lastName}
               </Text>
             )}
@@ -113,9 +107,7 @@ const Register = () => {
               error={formik.touched.email && formik.errors.email}
             />
             {formik.touched.email && formik.errors.email && (
-              <Text
-                className="text-xs font-Poppins_400 text-red-500"
-              >
+              <Text className="text-xs font-Poppins_400 text-red-500">
                 {formik.errors.email}
               </Text>
             )}
@@ -132,9 +124,7 @@ const Register = () => {
               error={formik.touched.phoneNumber && formik.errors.phoneNumber}
             />
             {formik.touched.phoneNumber && formik.errors.phoneNumber && (
-              <Text
-                className="text-xs font-Poppins_400 text-red-500"
-              >
+              <Text className="text-xs font-Poppins_400 text-red-500">
                 {formik.errors.phoneNumber}
               </Text>
             )}
@@ -152,9 +142,7 @@ const Register = () => {
               error={formik.touched.age && formik.errors.age}
             />
             {formik.touched.age && formik.errors.age && (
-              <Text
-                className="text-xs font-Poppins_400 text-red-500"
-              >
+              <Text className="text-xs font-Poppins_400 text-red-500">
                 {formik.errors.age}
               </Text>
             )}
@@ -169,18 +157,26 @@ const Register = () => {
               <View className="flex flex-row gap-x-4">
                 <View className="flex flex-row items-center">
                   <Text className="text-small font-Poppins_400">Male</Text>
-                  <RadioButton value="Male" />
+                  <RadioButton
+                    value="Male"
+                    status={
+                      formik.values.gender == "Male" ? "checked" : "unchecked"
+                    }
+                  />
                 </View>
                 <View className="flex flex-row items-center">
                   <Text className="text-small font-Poppins_400">Female</Text>
-                  <RadioButton value="Female" />
+                  <RadioButton
+                    value="Female"
+                    status={
+                      formik.values.gender == "Female" ? "checked" : "unchecked"
+                    }
+                  />
                 </View>
               </View>
             </RadioButton.Group>
             {formik.touched.gender && formik.errors.gender && (
-              <Text
-                className="text-xs font-Poppins_400 text-red-500"
-              >
+              <Text className="text-xs font-Poppins_400 text-red-500">
                 {formik.errors.gender}
               </Text>
             )}
@@ -198,9 +194,7 @@ const Register = () => {
               error={formik.touched.password && formik.errors.password}
             />
             {formik.touched.password && formik.errors.password && (
-              <Text
-                className="text-xs font-Poppins_400 text-red-500"
-              >
+              <Text className="text-xs font-Poppins_400 text-red-500">
                 {formik.errors.password}
               </Text>
             )}
@@ -214,17 +208,9 @@ const Register = () => {
               disabled={Loading}
             >
               <Text className="text-orange-100 font-Poppins_500 text-base">
-                Sign up
+                Update
               </Text>
             </Button>
-          </View>
-          <View className="flex flex-row items-center justify-center gap-x-2 mt-10">
-            <Text className="font-Poppins_400 text-base">Have an account?</Text>
-            <TouchableOpacity onPress={() => router.push("/")}>
-              <Text className="font-Poppins_600 text-base text-secondary">
-                Sign in
-              </Text>
-            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -232,4 +218,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default AccountEdit;

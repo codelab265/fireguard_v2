@@ -44,13 +44,20 @@ export default () => {
     <>
       <StatusBar backgroundColor={Colors.primary} />
       <AuthProvider>
-        <Stack>
+        <Stack
+        screenOptions={{ 
+          headerTintColor:"#fff",
+          headerStyle:{backgroundColor:Colors.primary}
+         }}
+        >
           <Stack.Screen
             name="index"
             options={{ headerTitle: "Home", headerShown: false }}
           />
           <Stack.Screen name="SplashScreen" options={{ headerShown: false }} />
           <Stack.Screen name="home" options={{ headerShown: false }} />
+          <Stack.Screen name="AccountDetails" options={{ headerTitle: "Account Details" }} />
+          <Stack.Screen name="AccountEdit" options={{ headerTitle: "Update Account" }} />
         </Stack>
       </AuthProvider>
     </>

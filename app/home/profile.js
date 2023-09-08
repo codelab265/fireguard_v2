@@ -7,26 +7,28 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Divider } from "react-native-paper";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "expo-router";
+import { useAuthContext } from "../../src/context/AuthContext";
 
 const profile = () => {
   const router = useNavigation();
+  const { userInfo, Logout } = useAuthContext();
+
   return (
     <>
-      <StatusBar backgroundColor={Colors.secondary} />
       <SafeAreaView style={{ flexGrow: 1 }}>
         <View className="flex-1">
-          <View className="flex-[2] bg-secondary flex items-center justify-center">
-            <View className="w-28 h-28 bg-blue-100 rounded-full flex items-center justify-center">
-              <Text className="font-Poppins_600 text-3xl text-secondary">
-                M
+          <View className="flex-[2] bg-primary flex items-center justify-center">
+            <View className="w-28 h-28 bg-orange-100 rounded-full flex items-center justify-center">
+              <Text className="font-Poppins_600 text-3xl text-primary">
+                {userInfo?.first_name?.charAt(0)+''+userInfo?.last_name?.charAt(0)}
               </Text>
             </View>
             <View className="flex flex-col items-center mt-4">
-              <Text className="text-2xl font-Poppins_600 text-blue-100">
-                Mphatso Mlenga
+              <Text className="text-2xl font-Poppins_600 text-orange-100">
+              {userInfo?.first_name+' '+userInfo?.last_name}
               </Text>
-              <Text className="text-blue-100 font-Poppins_400">
-                mphatsomlenga1@gmail.com
+              <Text className="text-orange-100 font-Poppins_400">
+                {userInfo?.email}
               </Text>
             </View>
           </View>
@@ -77,7 +79,7 @@ const profile = () => {
                 <Divider className="mt-4" />
               </TouchableOpacity>
 
-              <TouchableOpacity>
+              <TouchableOpacity onPress={Logout}>
                 <View className="flex flex-row justify-between items-center mt-8">
                   <View className="flex flex-row items-center">
                     <View className="w-6">

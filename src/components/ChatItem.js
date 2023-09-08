@@ -5,7 +5,9 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "expo-router";
 
 const ChatItem = () => {
-  const chatColors = ["#e36414", "#0f4c5c", "#606c38"];
+  const  randomColor = ()=> {
+    return 'hsla(' + (Math.random() * 360) + ', 100%, 50%, 1)';
+}
 
   const width = Dimensions.get("screen").width;
 
@@ -22,8 +24,8 @@ const ChatItem = () => {
         <View className="w-[15%]">
           <Avatar.Text
             size={50}
-            label="I"
-            style={{ backgroundColor: getColor() }}
+            label="I" 
+            style={{ backgroundColor: randomColor() }}
             labelStyle={{ color: "#fff", fontFamily: "Poppins_500Medium" }}
           />
         </View>

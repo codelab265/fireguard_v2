@@ -9,8 +9,8 @@ const chat = () => {
   return (
     <SafeAreaView style={{ flexGrow: 1 }}>
       <View className="flex-1">
-        <View className="flex flex-row items-center py-2 px-4 shadow-lg bg-secondary pt-4">
-          <Text className="text-lg text-blue-100 font-Poppins_500">
+        <View className="flex flex-row items-center py-2 px-4 shadow-lg bg-primary pt-4">
+          <Text className="text-lg text-orange-100 font-Poppins_500">
             Messages
           </Text>
         </View>

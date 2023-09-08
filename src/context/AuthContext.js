@@ -102,6 +102,23 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
+  const updateProfile = (values) => {
+    setLoading(true);
+    axios
+      .post(`${BASE_URL}/user/update`, values)
+      .then((response) => {
+        setLoading(false);
+        setUserInfo(response.data);
+        AsyncStorage.setItem("userInfo", JSON.stringify(response.data));
+        setIsLogged(true);
+        ToastAndroid.show("Updated successfully", ToastAndroid.LONG);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error(error);
+      });
+  };
+
   const Logout = async () => {
     await AsyncStorage.removeItem("userInfo");
     setIsLogged(false);
@@ -128,6 +145,7 @@ export const AuthProvider = ({ children }) => {
         isLogged,
         authLoading,
         Login,
+        updateProfile,
         Logout,
       }}
     >
