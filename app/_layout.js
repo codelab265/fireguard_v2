@@ -19,6 +19,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import Colors from "../src/shared/Colors";
 import { AuthProvider, useAuthContext } from "../src/context/AuthContext";
+import { PaperProvider } from "react-native-paper";
 
 export default () => {
   let [fontsLoaded] = useFonts({
@@ -44,21 +45,37 @@ export default () => {
     <>
       <StatusBar backgroundColor={Colors.primary} />
       <AuthProvider>
-        <Stack
-        screenOptions={{ 
-          headerTintColor:"#fff",
-          headerStyle:{backgroundColor:Colors.primary}
-         }}
-        >
-          <Stack.Screen
-            name="index"
-            options={{ headerTitle: "Home", headerShown: false }}
-          />
-          <Stack.Screen name="SplashScreen" options={{ headerShown: false }} />
-          <Stack.Screen name="home" options={{ headerShown: false }} />
-          <Stack.Screen name="AccountDetails" options={{ headerTitle: "Account Details" }} />
-          <Stack.Screen name="AccountEdit" options={{ headerTitle: "Update Account" }} />
-        </Stack>
+        <PaperProvider>
+          <Stack
+            screenOptions={{
+              headerTintColor: "#fff",
+              headerStyle: { backgroundColor: Colors.primary },
+            }}
+          >
+            <Stack.Screen
+              name="index"
+              options={{ headerTitle: "Home", headerShown: false }}
+            />
+            <Stack.Screen
+              name="SplashScreen"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="home" options={{ headerShown: false }} />
+            <Stack.Screen name="fireguard" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="AccountDetails"
+              options={{ headerTitle: "Account Details" }}
+            />
+            <Stack.Screen
+              name="AccountEdit"
+              options={{ headerTitle: "Update Account" }}
+            />
+            <Stack.Screen
+              name="UploadImages"
+              options={{ headerTitle: "Upload Images" }}
+            />
+          </Stack>
+        </PaperProvider>
       </AuthProvider>
     </>
   );

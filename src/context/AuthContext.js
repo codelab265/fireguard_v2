@@ -9,7 +9,7 @@ import * as Location from "expo-location";
 
 export const AuthContext = createContext();
 
-const CheckAuth = (isLogged, authLoading) => {
+const CheckAuth = (isLogged, authLoading, userInfo) => {
   const router = useRouter();
 
   useEffect(() => {
@@ -17,9 +17,15 @@ const CheckAuth = (isLogged, authLoading) => {
       router.replace("SplashScreen");
     } else {
       if (isLogged) {
-        setImmediate(() => {
-          router.replace("home");
-        });
+        if(userInfo?.role==1 || userInfo?.role==2){
+          setImmediate(() => {
+            router.replace("fireguard");
+          });
+        }else{
+          setImmediate(() => {
+            router.replace("home");
+          });
+        }
       } else {
         setImmediate(() => {
           router.replace("/");
@@ -36,12 +42,13 @@ export const AuthProvider = ({ children }) => {
   const [authLoading, setAuthLoading] = useState(true);
   const [location, setLocation] = useState(null);
   const [granted, setGranted] = useState(null);
+  const [uploadedImages, setUploadedImages] = useState([]);
 
   useEffect(() => {
     checkLogged();
   }, []);
 
-  CheckAuth(isLogged, authLoading);
+  CheckAuth(isLogged, authLoading, userInfo);
 
   useEffect(() => {
     (async () => {
@@ -147,6 +154,8 @@ export const AuthProvider = ({ children }) => {
         Login,
         updateProfile,
         Logout,
+        uploadedImages,
+        setUploadedImages
       }}
     >
       {children}
