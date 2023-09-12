@@ -1,21 +1,47 @@
-import { View, Text, TouchableOpacity, Pressable } from "react-native";
-import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Pressable,
+  FlatList,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
-import { Avatar, FAB, Searchbar } from "react-native-paper";
+import { ActivityIndicator, Avatar, FAB, Searchbar } from "react-native-paper";
 import ReportItem from "../../src/components/ReportItem";
 import moment from "moment/moment";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { useAuthContext } from "../../src/context/AuthContext";
 import { useNavigation } from "expo-router";
 import Colors from "../../src/shared/Colors";
+import axios from "axios";
+import { BASE_URL } from "../../src/config/API";
+import { Color } from "../../src/utils/Colors";
 
 export default function Page() {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [loading, setLoading] = useState(false);
   const date = new Date();
   const [filterDate, setFilterDate] = useState(date.toString());
-  const { userInfo } = useAuthContext();
+  const { userInfo, reports, setReports } = useAuthContext();
   const router = useNavigation();
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      await axios
+        .get(`${BASE_URL}/user/reports/${userInfo?.id}`)
+        .then((response) => {
+          setLoading(false);
+          setReports(response.data);
+        })
+        .catch((error) => {
+          setLoading(false);
+          console.error(error);
+        });
+    })();
+  }, []);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -29,6 +55,7 @@ export default function Page() {
     setFilterDate(date);
     hideDatePicker();
   };
+
   return (
     <SafeAreaView style={{ flexGrow: 1 }}>
       <View className="flex-1 relative  ">
@@ -42,12 +69,15 @@ export default function Page() {
             </Text>
           </View>
           <View>
-            <TouchableOpacity onPress={()=>router.navigate('AccountDetails')}>
+            <TouchableOpacity onPress={() => router.navigate("AccountDetails")}>
               <Avatar.Text
                 label={userInfo?.first_name?.charAt(0)}
                 size={35}
                 className="bg-white"
-                labelStyle={{ fontFamily: "Poppins_600SemiBold", color:Colors.primary }}
+                labelStyle={{
+                  fontFamily: "Poppins_600SemiBold",
+                  color: Colors.primary,
+                }}
               />
             </TouchableOpacity>
           </View>
@@ -75,12 +105,31 @@ export default function Page() {
           </Text>
         </View>
         <View className="flex-1 mt-2 px-4">
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <ReportItem />
-          </ScrollView>
+          {loading && (
+            <View className="flex items-center justify-center mt-2">
+              <ActivityIndicator color={Color.primary} size={"small"} />
+            </View>
+          )}
+
+          {!loading && reports.length === 0 && (
+            <View className="flex-1 items-center justify-center">
+              <Text className="text-base font-Poppins_500 text-gray-500"></Text>
+            </View>
+          )}
+          {!loading && reports.length > 0 && (
+            <FlatList
+              data={reports}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => <ReportItem report={item} />}
+              showsVerticalScrollIndicator={false}
+            />
+          )}
         </View>
 
-        <TouchableOpacity className="absolute right-4 bottom-4">
+        <TouchableOpacity
+          className="absolute right-4 bottom-4"
+          onPress={() => router.navigate("CreateReport")}
+        >
           <FAB icon={"plus"} className="bg-primary" color="#fff" />
         </TouchableOpacity>
       </View>

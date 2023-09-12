@@ -4,15 +4,19 @@ import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { Divider } from "react-native-paper";
 import { Color } from "../utils/Colors";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import moment from "moment";
+import { useNavigation } from "expo-router";
 
-const ReportItem = () => {
+const ReportItem = ({report}) => {
+  const route = useNavigation();
+  const data = JSON.stringify(report);
   return (
-    <TouchableOpacity>
-      <View className="w-full flex flex-col bg-white border border-gray-300 p-2 rounded-md mb-2">
+    <TouchableOpacity onPress={()=>route.navigate("ReportDetails", {report:data})}>
+      <View className="w-full flex flex-col bg-white border border-gray-300 p-2 rounded-md mb-1">
         <View className="flex flex-row justify-end items-center gap-x-1">
           <FontAwesome5 name="clock" color={Color.third} />
           <Text className="font-Poppins_500 text-third text-xs">
-            2 Days ago
+            {moment(report.created_at).fromNow()}
           </Text>
         </View>
         <Divider className="my-1" />
@@ -24,18 +28,18 @@ const ReportItem = () => {
           </View>
           <View className="ml-2">
             <View>
-              <Text className="text-base font-Poppins_500">
-                Lilongwe, area 23
+              <Text className="font-Poppins_600">
+                {report.location}
               </Text>
             </View>
             <View className="mt-1">
               <View className="flex flex-row gap-x-1">
                 <Text className="text-xs font-Poppins_600">LAT:</Text>
-                <Text className="text-xs font-Poppins_400">18.1548888</Text>
+                <Text className="text-xs font-Poppins_400">{report.latitude}</Text>
               </View>
               <View className="flex flex-row gap-x-1">
                 <Text className="text-xs font-Poppins_600">LONG:</Text>
-                <Text className="text-xs font-Poppins_400">18.1548888</Text>
+                <Text className="text-xs font-Poppins_400">{report.longitude}</Text>
               </View>
             </View>
           </View>

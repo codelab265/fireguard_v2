@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }) => {
   const [location, setLocation] = useState(null);
   const [granted, setGranted] = useState(null);
   const [uploadedImages, setUploadedImages] = useState([]);
+  const [reports, setReports] = useState([]);
 
   useEffect(() => {
     checkLogged();
@@ -100,7 +101,6 @@ export const AuthProvider = ({ children }) => {
           console.log(response.data);
         } else {
           ToastAndroid.show("Invalid email or Password", ToastAndroid.LONG);
-          resetForm();
         }
       })
       .catch((error) => {
@@ -155,7 +155,10 @@ export const AuthProvider = ({ children }) => {
         updateProfile,
         Logout,
         uploadedImages,
-        setUploadedImages
+        setUploadedImages,
+        location,
+        reports,
+        setReports
       }}
     >
       {children}

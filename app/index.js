@@ -33,7 +33,7 @@ export default function Login() {
     },
     validationSchema,
     onSubmit: (values, { resetForm }) => {
-      Login(values, resetForm);
+      Login(values);
       resetForm();
     },
   });

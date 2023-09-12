@@ -74,6 +74,10 @@ export default () => {
               name="UploadImages"
               options={{ headerTitle: "Upload Images" }}
             />
+            <Stack.Screen
+              name="UploadedImages"
+              options={{ headerTitle: "Uploaded Images" }}
+            />
           </Stack>
         </PaperProvider>
       </AuthProvider>
