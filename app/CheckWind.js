@@ -1,13 +1,12 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { WebView } from "react-native-webview";
-import { useAuthContext } from "../../src/context/AuthContext";
+import WebView from "react-native-webview";
+import { useSearchParams } from "expo-router";
 
-const Windmap = () => {
-  const { location } = useAuthContext();
-  const lat = location?.coords?.latitude;
-  const lon = location?.coords?.longitude;
-  
+const CheckWind = () => {
+  const { latitude, longitude } = useSearchParams();
+  const lat = latitude;
+  const lon = longitude;
   return (
     <View className="flex-1">
       <WebView
@@ -20,4 +19,4 @@ const Windmap = () => {
   );
 };
 
-export default Windmap;
+export default CheckWind;

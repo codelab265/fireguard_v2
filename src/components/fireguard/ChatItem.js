@@ -5,10 +5,10 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "expo-router";
 import moment from "moment";
 
-const ChatItem = ({ item }) => {
-  const randomColor = () => {
-    return "hsla(" + Math.random() * 360 + ", 100%, 50%, 1)";
-  };
+const ChatItem = ({item}) => {
+  const  randomColor = ()=> {
+    return 'hsla(' + (Math.random() * 360) + ', 100%, 50%, 1)';
+}
 
   const width = Dimensions.get("screen").width;
 
@@ -20,16 +20,16 @@ const ChatItem = ({ item }) => {
 
   const router = useNavigation();
   return (
-    <TouchableOpacity onPress={() => router.navigate("UserChat", {
-      user_id:item.sender_id,
-      first_name:item.sender.first_name,
-      last_name:item.sender.last_name
+    <TouchableOpacity onPress={()=>router.navigate('FireguardChat', {
+        user_id:item.receiver_id,
+        first_name:item.receiver.first_name,
+        last_name:item.receiver.last_name
     })}>
       <View className="flex flex-row w-full p-4 bg-white">
         <View className="w-[15%]">
           <Avatar.Text
             size={50}
-            label={item.sender.first_name.charAt(0)}
+            label={item.receiver.first_name.charAt(0)} 
             style={{ backgroundColor: randomColor() }}
             labelStyle={{ color: "#fff", fontFamily: "Poppins_500Medium" }}
           />
@@ -38,27 +38,24 @@ const ChatItem = ({ item }) => {
           <View className="flex flex-row justify-between items-center">
             <View className="">
               <Text className="text-base font-Poppins_600">
-                {item.sender.first_name + " " + item.sender.last_name}
+                {item.receiver.first_name+" "+item.receiver.last_name}
               </Text>
             </View>
             <View>
               <Text className="text-xs font-Poppins_400">
-                {moment(item.last_message.updated_at).format("LT")}
+                {moment(item.last_message.updated_at).format('LT')}
               </Text>
             </View>
           </View>
           <View className="truncate">
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              className="font-Poppins_400 text-xs text-gray-600"
+            <Text numberOfLines={1} ellipsizeMode="tail" className="font-Poppins_400 text-xs text-gray-600"
             >
               {item.last_message.message}
             </Text>
           </View>
         </View>
       </View>
-      <Divider />
+      <Divider/>
     </TouchableOpacity>
   );
 };

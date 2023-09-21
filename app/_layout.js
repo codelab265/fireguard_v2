@@ -78,6 +78,27 @@ export default () => {
               name="UploadedImages"
               options={{ headerTitle: "Uploaded Images" }}
             />
+            <Stack.Screen
+              name="ReportDetails"
+              options={{ headerTitle: "Report Details" }}
+            />
+            <Stack.Screen
+              name="ViewLocation"
+              options={{ headerTitle: "Location" }}
+            />
+            <Stack.Screen
+              name="CheckWind"
+              options={{ headerTitle: "Wind details for the user" }}
+            />
+            <Stack.Screen
+              name="FireguardChat"
+              options={{ headerShown:false }}
+            />
+            <Stack.Screen
+              name="UserChat"
+              options={{ headerShown:false }}
+            />
+            
           </Stack>
         </PaperProvider>
       </AuthProvider>

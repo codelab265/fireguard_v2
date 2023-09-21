@@ -12,7 +12,7 @@ const GalleryItem = ({item}) => {
 
   return (
     <TouchableOpacity onPress={()=>router.navigate("UploadedImages", {images:data, user })}>
-      <Card mode="contained" contentStyle={{ padding: 5, position: "relative", overflow:"hidden" }}>
+      <Card mode="contained" contentStyle={{ padding: 5, position: "relative", overflow:"hidden", marginBottom:5 }}>
         <Card.Content className="flex flex-row items-center space-x-2 mb-1 absolute z-10">
           <View className="py-2 px-4 rounded-full bg-white">
             <Text className="text-base font-Poppins_600">
