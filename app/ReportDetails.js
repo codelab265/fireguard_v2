@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React, { useState } from "react";
-import MapView, { Marker, Circle, PROVIDER_GOOGLE } from "react-native-maps";
-import { useNavigation, useSearchParams } from "expo-router";
+import MapView, { Marker, Circle, PROVIDER_GOOGLE, Polygon } from "react-native-maps";
+import { useLocalSearchParams, useNavigation, useSearchParams } from "expo-router";
 import { ActivityIndicator, Button, FAB } from "react-native-paper";
 import { TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
@@ -12,15 +12,13 @@ import { useAuthContext } from "../src/context/AuthContext";
 
 const ReportDetails = () => {
   const [loading, setLoading] = useState(false);
-  let { report } = useSearchParams();
+  let { report } = useLocalSearchParams();
   const router = useNavigation();
   const { setReports } = useAuthContext();
 
-  report = JSON.parse(report);
-
   const [mapRegion, setmapRegion] = useState({
-    latitude: parseFloat(report.latitude),
-    longitude: parseFloat(report.longitude),
+    latitude: parseFloat(report.report_detail[0]?.latitude),
+    longitude: parseFloat(report.report_detail[0]?.longitude),
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
@@ -50,8 +48,14 @@ const ReportDetails = () => {
         initialRegion={mapRegion}
         provider={PROVIDER_GOOGLE}
       >
-        <Marker coordinate={mapRegion} title={report.location} />
-        <Circle radius={500} center={mapRegion} />
+        {report.report_detail.length > 2 && (
+          <Polygon
+            coordinates={report.report_detail}
+            strokeColor="#F00"
+            fillColor="rgba(255,0,0,0.5)"
+            strokeWidth={2}
+          />
+        )}
       </MapView>
       {loading && (
         <ActivityIndicator

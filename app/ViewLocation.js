@@ -1,85 +1,100 @@
-import { View, Text } from "react-native";
-import React, { useState } from "react";
-import { useNavigation, useSearchParams } from "expo-router";
-import MapView, { Circle, Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import MapViewDirections from "react-native-maps-directions";
+import { View, Text, ActivityIndicator } from "react-native";
+import React, { useEffect, useState } from "react";
+import { useNavigation, useLocalSearchParams } from "expo-router";
+import MapView, { PROVIDER_GOOGLE, Polygon } from "react-native-maps";
+
 import { Button } from "react-native-paper";
-import { useAuthContext } from "../src/context/AuthContext";
+import * as Location from "expo-location";
 
 const ViewLocation = () => {
-  const { id, user_id, first_name, last_name, latitude, longitude } =
-    useSearchParams();
+  const [location, setLocation] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { report } = useLocalSearchParams();
   const router = useNavigation();
-  const { location } = useAuthContext();
-  const [mapRegion, setmapRegion] = useState({
-    latitude: parseFloat(latitude),
-    longitude: parseFloat(longitude),
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
 
-  const origin = { latitude: 37.3318456, longitude: -122.0296002 };
-  const destination = { latitude: 37.771707, longitude: -122.4053769 };
-  const [coordinates] = useState([
-    {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    },
-    {
-      latitude: parseFloat(latitude),
-      longitude: parseFloat(longitude),
-    },
-  ]);
-  const GOOGLE_MAPS_APIKEY = "AIzaSyCG9E5E7_YCna0L7GCr8BJgGjLlxkkJE-8";
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let loc = await Location.getCurrentPositionAsync({});
+      console.log(loc);
+      setLocation(loc);
+      setLoading(false);
+    })();
+  }, []);
 
   return (
     <View className="flex-1 relative">
-      <MapView
-        className="w-full h-full"
-        initialRegion={{
-          latitude: coordinates[0].latitude,
-          longitude: coordinates[0].longitude,
-          latitudeDelta: 0.0622,
-          longitudeDelta: 0.0121,
-        }}
-        provider={PROVIDER_GOOGLE}
-      >
-        <MapViewDirections
-          origin={coordinates[0]}
-          destination={coordinates[1]}
-          apikey={GOOGLE_MAPS_APIKEY} // insert your API Key here
-          strokeWidth={4}
-          strokeColor="red"
-        />
-        <Marker coordinate={coordinates[0]} />
-        <Marker coordinate={coordinates[1]} />
-      </MapView>
-      <Button
-        mode="contained"
-        className="absolute bottom-3 right-3"
-        onPress={() =>
-          router.navigate("FireguardChat", {
-            id: id,
-            user_id: user_id,
-            first_name: first_name,
-            last_name: last_name,
-          })
-        }
-      >
-        <Text>Chat</Text>
-      </Button>
-      <Button
-        mode="contained"
-        className="absolute bottom-3 right-28"
-        onPress={() =>
-          router.navigate("CheckWind", {
-            latitude,
-            longitude,
-          })
-        }
-      >
-        <Text>Check wind</Text>
-      </Button>
+      {loading ? (
+        <View className="flex flex-row items-center justify-center space-x-2">
+          <ActivityIndicator size={"small"} />
+          <Text>Getting your location</Text>
+        </View>
+      ) : (
+        <MapView
+          className="w-full h-full"
+          initialRegion={{
+            latitude: report.report_detail[0].latitude,
+            longitude: report.report_detail[0].longitude,
+            latitudeDelta: 0.0622,
+            longitudeDelta: 0.0121,
+          }}
+          provider={PROVIDER_GOOGLE}
+        >
+          {report.report_detail.length > 2 && (
+            <Polygon
+              coordinates={report.report_detail}
+              strokeColor="#F00"
+              fillColor="rgba(255,0,0,0.5)"
+              strokeWidth={2}
+            />
+          )}
+        </MapView>
+      )}
+
+      <View className="absolute bottom-3 w-full flex flex-row items-center justify-between px-4">
+        <Button
+          mode="contained"
+          className=""
+          onPress={() =>
+            router.navigate("FireguardChat", {
+              id: report.id,
+              user_id: report.user_id,
+              first_name: report.user.first_name,
+              last_name: report.user.last_name,
+            })
+          }
+        >
+          <Text>Chat</Text>
+        </Button>
+        <Button
+          mode="contained"
+          className=""
+          onPress={() =>
+            router.navigate("Equipments", {
+              id: report.id,
+            })
+          }
+        >
+          <Text>Equipments</Text>
+        </Button>
+        <Button
+          mode="contained"
+          className=""
+          onPress={() =>
+            router.navigate("CheckWind", {
+              latitude:report.report_detail[0].latitude,
+              longitude:report.report_detail[0].longitude,
+            })
+          }
+        >
+          <Text>Check wind</Text>
+        </Button>
+      </View>
     </View>
   );
 };

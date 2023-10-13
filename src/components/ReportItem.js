@@ -9,10 +9,10 @@ import { useNavigation } from "expo-router";
 
 const ReportItem = ({ report }) => {
   const route = useNavigation();
-  const data = JSON.stringify(report);
+
   return (
     <TouchableOpacity
-      onPress={() => route.navigate("ReportDetails", { report: data })}
+      onPress={() => route.navigate("ReportDetails", { report })}
     >
       <View className="w-full flex flex-col bg-white border border-gray-300 p-2 rounded-md mb-1">
         <View className="flex flex-row justify-between items-center gap-x-1">
@@ -42,13 +42,13 @@ const ReportItem = ({ report }) => {
               <View className="flex flex-row gap-x-1">
                 <Text className="text-xs font-Poppins_600">LAT:</Text>
                 <Text className="text-xs font-Poppins_400">
-                  {report.latitude}
+                  {report.report_detail[0]?.latitude}
                 </Text>
               </View>
               <View className="flex flex-row gap-x-1">
                 <Text className="text-xs font-Poppins_600">LONG:</Text>
                 <Text className="text-xs font-Poppins_400">
-                  {report.longitude}
+                  {report.report_detail[0]?.longitude}
                 </Text>
               </View>
             </View>

@@ -86,6 +86,14 @@ export default () => {
               name="ViewLocation"
               options={{ headerTitle: "Location" }}
             />
+             <Stack.Screen
+              name="CreateReport"
+              options={{ headerTitle: "Create Report" }}
+            />
+            <Stack.Screen
+              name="Equipments"
+              options={{ headerTitle: "Suggested equipments" }}
+            />
             <Stack.Screen
               name="CheckWind"
               options={{ headerTitle: "Wind details for the user" }}

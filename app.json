@@ -21,10 +21,11 @@
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
       "package": "com.fireguard.codelab",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyCG9E5E7_YCna0L7GCr8BJgGjLlxkkJE-8"
+          "apiKey": "AIzaSyDoJl8RZOC0TUHMlaybKhNYtqJaiVt_ABo"
         }
       }
     },

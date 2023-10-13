@@ -44,6 +44,8 @@ export const AuthProvider = ({ children }) => {
   const [granted, setGranted] = useState(null);
   const [uploadedImages, setUploadedImages] = useState([]);
   const [reports, setReports] = useState([]);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [equipments, setEquipments] = useState([]);
 
   useEffect(() => {
     checkLogged();
@@ -54,22 +56,27 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
         return;
       } else {
         setGranted(true);
       }
     })();
-  }, [location]);
+  }, []);
 
   useEffect(() => {
     (async () => {
       if (!granted) return;
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      try {
+        let userLocation = await Location.getCurrentPositionAsync({});
+        setLocation(userLocation);
+      } catch (error) {
+        setErrorMsg('Error fetching location: ' + error.message);
+      }
     })();
   }, [granted]);
+
 
   const Register = (values) => {
     setLoading(true);
@@ -151,6 +158,7 @@ export const AuthProvider = ({ children }) => {
         userInfo,
         isLogged,
         authLoading,
+        errorMsg,
         Login,
         updateProfile,
         Logout,
@@ -158,7 +166,9 @@ export const AuthProvider = ({ children }) => {
         setUploadedImages,
         location,
         reports,
-        setReports
+        setReports,
+        equipments,
+        setEquipments
       }}
     >
       {children}

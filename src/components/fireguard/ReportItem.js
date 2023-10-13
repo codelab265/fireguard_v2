@@ -13,13 +13,7 @@ const ReportItem = ({ report }) => {
     <TouchableOpacity
       onPress={() =>
         router.navigate("ViewLocation", {
-          id: report.id,
-          user_id: report.user_id,
-          first_name: report.user.first_name,
-          last_name: report.user.last_name,
-          location: report.location,
-          latitude: report.latitude,
-          longitude: report.longitude,
+          report,
         })
       }
     >
@@ -37,7 +31,7 @@ const ReportItem = ({ report }) => {
               </Text>
               <Text
                 className={`${
-                  report.attended==1 ? "text-green-500" : "text-red-500"
+                  report.attended == 1 ? "text-green-500" : "text-red-500"
                 }`}
               >
                 <FontAwesome name="circle" size={20} />
