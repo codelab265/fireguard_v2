@@ -1,7 +1,16 @@
 import { View, Text } from "react-native";
 import React, { useState } from "react";
-import MapView, { Marker, Circle, PROVIDER_GOOGLE, Polygon } from "react-native-maps";
-import { useLocalSearchParams, useNavigation, useSearchParams } from "expo-router";
+import MapView, {
+  Marker,
+  Circle,
+  PROVIDER_GOOGLE,
+  Polygon,
+} from "react-native-maps";
+import {
+  useLocalSearchParams,
+  useNavigation,
+  useSearchParams,
+} from "expo-router";
 import { ActivityIndicator, Button, FAB } from "react-native-paper";
 import { TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
@@ -48,12 +57,12 @@ const ReportDetails = () => {
         initialRegion={mapRegion}
         provider={PROVIDER_GOOGLE}
       >
-        {report.report_detail.length > 2 && (
-          <Polygon
-            coordinates={report.report_detail}
-            strokeColor="#F00"
-            fillColor="rgba(255,0,0,0.5)"
-            strokeWidth={2}
+        {report.report_detail.length > 0 && (
+          <Marker
+            coordinate={{
+              latitude: parseFloat(report.report_detail[0]?.latitude),
+              longitude: parseFloat(report.report_detail[0]?.longitude),
+            }}
           />
         )}
       </MapView>

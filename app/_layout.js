@@ -84,7 +84,7 @@ export default () => {
             />
             <Stack.Screen
               name="ViewLocation"
-              options={{ headerTitle: "Location" }}
+              options={{ headerShown:false }}
             />
              <Stack.Screen
               name="CreateReport"

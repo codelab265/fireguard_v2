@@ -9,7 +9,7 @@ import { useAuthContext } from "../src/context/AuthContext";
 import axios from "axios";
 import { BASE_URL } from "../src/config/API";
 import { ToastAndroid } from "react-native";
-import MapView, { Polygon, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Marker, Polygon, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 
 const CreateReport = () => {
@@ -75,7 +75,7 @@ const CreateReport = () => {
   }, []);
 
   const handleMapPress = (e) => {
-    setCoordinates([...coordinates, e.nativeEvent.coordinate]);
+    setCoordinates(e.nativeEvent.coordinate);
     console.log(e.nativeEvent);
   };
 
@@ -93,12 +93,9 @@ const CreateReport = () => {
         initialRegion={initialRegion}
         className="flex-1"
       >
-        {coordinates.length > 2 && (
-          <Polygon
-            coordinates={coordinates}
-            strokeColor="#F00"
-            fillColor="rgba(255,0,0,0.5)"
-            strokeWidth={2}
+        {coordinates && (
+          <Marker
+          coordinate={coordinates}
           />
         )}
       </MapView>
