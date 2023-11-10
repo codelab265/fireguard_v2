@@ -58,12 +58,24 @@ const ReportDetails = () => {
         provider={PROVIDER_GOOGLE}
       >
         {report.report_detail.length > 0 && (
-          <Marker
-            coordinate={{
-              latitude: parseFloat(report.report_detail[0]?.latitude),
-              longitude: parseFloat(report.report_detail[0]?.longitude),
-            }}
-          />
+          <>
+            <Marker
+              coordinate={{
+                latitude: parseFloat(report.report_detail[0]?.latitude),
+                longitude: parseFloat(report.report_detail[0]?.longitude),
+              }}
+            />
+            <Circle
+              center={{
+                latitude: parseFloat(report.report_detail[0]?.latitude),
+                longitude: parseFloat(report.report_detail[0]?.longitude),
+              }}
+
+              radius={200}
+              strokeColor="red"
+              strokeWidth={3}
+            />
+          </>
         )}
       </MapView>
       {loading && (

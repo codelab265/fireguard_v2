@@ -113,7 +113,9 @@ export default function Page() {
 
           {!loading && reports.length === 0 && (
             <View className="flex-1 items-center justify-center">
-              <Text className="text-base font-Poppins_500 text-gray-500"></Text>
+              <Text className="text-base font-Poppins_500 text-gray-500">
+                No data available
+              </Text>
             </View>
           )}
           {!loading && reports.length > 0 && (

@@ -15,7 +15,7 @@ const ViewLocation = () => {
   const map = useRef(null);
   const [MenuVisible, setMenuVisible] = useState(false);
   const GOOGLE_MAPS_APIKEY = "AIzaSyAQrBDvwyt-UZyeTQFmO52xVf5Iu23Qoqw";
-  const origin = { latitude: location.coords.latitude, longitude: location.coords.longitude };
+  const origin = { latitude: location?.coords.latitude, longitude: location?.coords.longitude };
   const destination = { latitude: parseFloat(report.report_detail[0]?.latitude), longitude: parseFloat(report.report_detail[0]?.longitude) };
 
   const openMenu = () => setMenuVisible(true);
@@ -116,19 +116,19 @@ const ViewLocation = () => {
             longitudeDelta: 0.0121,
           }}
           provider={PROVIDER_GOOGLE}
-         
           ref={map}
         >
           <Marker
             coordinate={destination}
+            pinColor="green"
           />
-          <Circle center={destination} radius={100} strokeWidth={3} strokeColor="red"/>
+          <Circle center={destination} radius={100} strokeWidth={4} strokeColor="green"/>
           <MapViewDirections
             origin={origin}
             destination={destination}
             apikey={GOOGLE_MAPS_APIKEY} // insert your API Key here
-            strokeWidth={4}
-            strokeColor="red"
+            strokeWidth={5}
+            strokeColor="green"
           />
         </MapView>
       )}
