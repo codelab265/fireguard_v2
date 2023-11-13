@@ -6,6 +6,8 @@ import MapView, { Circle, Marker, PROVIDER_GOOGLE, Polygon } from "react-native-
 import { Appbar, Button, Menu } from "react-native-paper";
 import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
+import WindInfo from "../src/components/fireguard/WindInfo";
+import axios from "axios";
 
 const ViewLocation = () => {
   const [location, setLocation] = useState(null);
@@ -18,6 +20,11 @@ const ViewLocation = () => {
   const origin = { latitude: location?.coords.latitude, longitude: location?.coords.longitude };
   const destination = { latitude: parseFloat(report.report_detail[0]?.latitude), longitude: parseFloat(report.report_detail[0]?.longitude) };
 
+  const [windDirection, setWindDirection] = useState(null);
+  const [windSpeed, setWindSpeed] = useState(null);
+
+  const openViewAPI = "c14e51f1f5fb7d1491352f44a1788115";
+
   const openMenu = () => setMenuVisible(true);
 
   const closeMenu = () => setMenuVisible(false);
@@ -28,6 +35,38 @@ const ViewLocation = () => {
       map?.current?.animateCamera(cam);
     });
   };
+
+  
+  useEffect(() => {
+    // Function to fetch wind direction data from OpenWeatherMap
+    const fetchWindDirection = async () => {
+      try {
+        const response = await axios.get(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${destination.latitude}&lon=${destination.longitude}&appid=${openViewAPI}`
+        );
+
+        const windData = response.data.wind;
+        const newWindDirection = windData.deg;
+        const newWindSpeed = windData.speed;
+
+        // Update the wind direction and speed states
+        setWindDirection(newWindDirection);
+        setWindSpeed(newWindSpeed);
+        console.log(windData);
+      } catch (error) {
+        console.error('Error fetching wind data:', error);
+      }
+    };
+
+    // Initial fetch
+    fetchWindDirection();
+
+    // Set up a timer to periodically update wind direction
+    const interval = setInterval(fetchWindDirection, 60000); // Refresh every 60 seconds
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
+
 
   useEffect(() => {
     (async () => {
@@ -122,7 +161,8 @@ const ViewLocation = () => {
             coordinate={destination}
             pinColor="green"
           />
-          <Circle center={destination} radius={100} strokeWidth={4} strokeColor="green"/>
+          <Circle center={destination} radius={300}
+          fillColor="rgba(255, 0, 0, 0.3)"/>
           <MapViewDirections
             origin={origin}
             destination={destination}
@@ -132,7 +172,9 @@ const ViewLocation = () => {
           />
         </MapView>
       )}
-
+      {windDirection !== null && windSpeed !== null && (
+        <WindInfo windDirection={windDirection} windSpeed={windSpeed} />
+      )}
       
     </View>
   );
