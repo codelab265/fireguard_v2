@@ -26,9 +26,10 @@ const Gallery = () => {
   const getImages = async () => {
     setLoading(true);
     await axios
-      .get(`${BASE_URL}/fireguard/images`)
+      .get(`${BASE_URL}/fireguard/files`)
       .then((response) => {
         setLoading(false);
+        console.log(response.data);
         setUploadedImages(response.data);
       })
       .catch((error) => {

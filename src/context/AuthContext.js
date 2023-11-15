@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }) => {
   const [location, setLocation] = useState(null);
   const [granted, setGranted] = useState(null);
   const [uploadedImages, setUploadedImages] = useState([]);
+  const [uploadedVideos, setUploadedVideos] = useState([]);
   const [reports, setReports] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
   const [equipments, setEquipments] = useState([]);
@@ -163,7 +164,9 @@ export const AuthProvider = ({ children }) => {
         updateProfile,
         Logout,
         uploadedImages,
+        uploadedVideos,
         setUploadedImages,
+        setUploadedVideos,
         location,
         reports,
         setReports,

@@ -22,7 +22,7 @@ export default function () {
               <FontAwesome name="bar-chart-o" size={20} color={color} />
               <Text
                 className={focused ? "font-Poppins_500" : "font-Poppins_400"}
-                style={{ color:color }}
+                style={{ color: color }}
               >
                 Reports
               </Text>
@@ -30,65 +30,87 @@ export default function () {
           ),
         }}
       />
-      <Tabs.Screen name="Gallery"
-      options={{
-        tabBarIcon: ({ color, focused }) => (
-          <View className="flex flex-col items-center justify-center">
-            <FontAwesome name="image" size={20} color={color} />
-            <Text
-              className={focused ? "font-Poppins_500" : "font-Poppins_400"}
-              style={{ color:color }}
-            >
-              Gallery
-            </Text>
-          </View>
-        ),
-      }}
+      <Tabs.Screen
+        name="Gallery"
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <View className="flex flex-col items-center justify-center">
+              <FontAwesome name="image" size={20} color={color} />
+              <Text
+                className={focused ? "font-Poppins_500" : "font-Poppins_400"}
+                style={{ color: color }}
+              >
+                Gallery
+              </Text>
+            </View>
+          ),
+        }}
       />
-      <Tabs.Screen name="Chat"
-      options={{
-        tabBarIcon: ({ color, focused }) => (
-          <View className="flex flex-col items-center justify-center">
-            <FontAwesome name="commenting-o" size={20} color={color} />
-            <Text
-              className={focused ? "font-Poppins_500" : "font-Poppins_400"}
-              style={{ color:color }}
-            >
-              Chat
-            </Text>
-          </View>
-        ),
-      }}
+      <Tabs.Screen
+        name="Chat"
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <View className="flex flex-col items-center justify-center">
+              <FontAwesome name="commenting-o" size={20} color={color} />
+              <Text
+                className={focused ? "font-Poppins_500" : "font-Poppins_400"}
+                style={{ color: color }}
+              >
+                Chat
+              </Text>
+            </View>
+          ),
+        }}
       />
-      <Tabs.Screen name="Windmap"
-      options={{
-        tabBarIcon: ({ color, focused }) => (
-          <View className="flex flex-col items-center justify-center">
-            <FontAwesome name="globe" size={20} color={color} />
-            <Text
-              className={focused ? "font-Poppins_500" : "font-Poppins_400"}
-              style={{ color:color }}
-            >
-              Wind Map
-            </Text>
-          </View>
-        ),
-      }}
+
+      <Tabs.Screen
+        name="tools"
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <View className="flex flex-col items-center justify-center">
+              <FontAwesome name="tasks" size={20} color={color} />
+              <Text
+                className={focused ? "font-Poppins_500" : "font-Poppins_400"}
+                style={{ color: color }}
+              >
+                Tools
+              </Text>
+            </View>
+          ),
+        }}
       />
-      <Tabs.Screen name="profile"
-      options={{
-        tabBarIcon: ({ color, focused }) => (
-          <View className="flex flex-col items-center justify-center">
-            <FontAwesome name="user" size={20} color={color} />
-            <Text
-              className={focused ? "font-Poppins_500" : "font-Poppins_400"}
-              style={{ color:color }}
-            >
-              Profile
-            </Text>
-          </View>
-        ),
-      }}
+
+      <Tabs.Screen
+        name="Windmap"
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <View className="flex flex-col items-center justify-center">
+              <FontAwesome name="globe" size={20} color={color} />
+              <Text
+                className={focused ? "font-Poppins_500" : "font-Poppins_400"}
+                style={{ color: color }}
+              >
+                Wind
+              </Text>
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <View className="flex flex-col items-center justify-center">
+              <FontAwesome name="user" size={20} color={color} />
+              <Text
+                className={focused ? "font-Poppins_500" : "font-Poppins_400"}
+                style={{ color: color }}
+              >
+                Profile
+              </Text>
+            </View>
+          ),
+        }}
       />
     </Tabs>
   );

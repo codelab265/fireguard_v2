@@ -1,28 +1,82 @@
 export default [
   {
-    id: 1,
-    img: require('../assets/articles_a.png'),
-    title: 'Articles',
-    description: 'This app will inspire you to leave the comfort zone and get things done',
+    tool: "Fire Engines",
+    use: " Vehicles equipped with firefighting apparatus and water tanks.",
   },
   {
-    id: 2,
-    img: require('../assets/goals_a.png'),
-    title: 'Goals',
-    description: 'Set your goals and aggressively pursue them using this app',
+    tool: "Fire Hoses",
+    use: "Flexible tubes used to carry water from a water source to extinguish fires.",
   },
   {
-    id: 3,
-    img: require('../assets/Course_a.png'),
-    title: "Courses",
-    description:
-      "You will have access to the comprehensive course on personal development through this app",
+    tool: "Nozzles",
+    use: " Devices attached to hoses to control the direction and flow of water.",
   },
   {
-    id: 4,
-    img: require('../assets/To-Do_a.png'),
-    title: 'To-Do',
-    description: "It's not magic, it's just science",
+    tool: "Fire Extinguishers",
+    use: " Portable devices to quickly suppress small fires.",
   },
-  
+  {
+    tool: "Firefighter Turnout Gear",
+    use: " Protective clothing, including jacket and pants, worn by firefighters.",
+  },
+  {
+    tool: "Self-Contained Breathing Apparatus (SCBA)",
+    use: " Equipment enabling firefighters to breathe in smoke-filled environments.",
+  },
+  {
+    tool: "Fire Helmets:",
+    use: " Headgear providing protection against heat and falling debris.",
+  },
+  {
+    tool: "Firefighting Boots",
+    use: " Boots designed to resist heat and protect against water and other hazards.",
+  },
+  {
+    tool: "Fireproof Gloves",
+    use: " Heat-resistant gloves to protect hands from burns.",
+  },
+  {
+    tool: "Thermal Imaging Cameras",
+    use: " Devices that detect heat, helping firefighters locate people and hotspots.",
+  },
+  {
+    tool: "Fire Blankets",
+    use: " Fire-resistant sheets used to smother small fires or protect individuals.",
+  },
+  {
+    tool: "Axe",
+    use: " Tool for breaching doors, walls, or creating openings in structures.",
+  },
+  {
+    tool: "Halligan Bar",
+    use: " Forcible entry tool with various functions, like prying and chopping.",
+  },
+  {
+    tool: "Rescue Tools (e.g., Jaws of Life)",
+    use: " Hydraulic or pneumatic tools used to extricate people from vehicles.",
+  },
+  {
+    tool: "Emergency Medical Equipment",
+    use: " First aid supplies for treating injuries during emergencies",
+  },
+  {
+    tool: "Portable Lighting",
+    use: " Compact lights to illuminate dark or smoky areas.",
+  },
+  {
+    tool: "Two-Way Radios",
+    use: " Communication devices for coordination between firefighters.",
+  },
+  {
+    tool: "Emergency Flares",
+    use: "Illuminating devices for signaling or marking locations.",
+  },
+  {
+    tool: "Fire Shelter (wildland firefighting)",
+    use: "Portable, heat-resistant tents for protection in wildfires.",
+  },
+  {
+    tool: "Positive Pressure Ventilation Fan",
+    use: "Fan used to remove smoke from buildings and improve visibility.",
+  },
 ];

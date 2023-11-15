@@ -75,6 +75,10 @@ export default () => {
               options={{ headerTitle: "Upload Images" }}
             />
             <Stack.Screen
+              name="UploadVideos"
+              options={{ headerTitle: "Upload video" }}
+            />
+            <Stack.Screen
               name="UploadedImages"
               options={{ headerTitle: "Uploaded Images" }}
             />

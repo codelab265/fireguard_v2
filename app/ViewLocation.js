@@ -119,15 +119,7 @@ const ViewLocation = () => {
             }}
             title="Chat"
           />
-          <Menu.Item
-            onPress={() => {
-              closeMenu();
-              router.navigate("Equipments", {
-                id: report.id,
-              });
-            }}
-            title="Equipments"
-          />
+          
           <Menu.Item
             onPress={() => {
               closeMenu();
