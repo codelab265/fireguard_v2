@@ -60,22 +60,6 @@ export default function () {
         ),
       }}
       />
-      <Tabs.Screen name="equipments"
-      options={{
-        tabBarIcon: ({ color, focused }) => (
-          <View className="flex flex-col items-center justify-center">
-            <FontAwesome name="tasks" size={20} color={color} />
-            <Text
-              className={focused ? "font-Poppins_500" : "font-Poppins_400"}
-              style={{ color:color }}
-            >
-              Tools
-            </Text>
-          </View>
-        ),
-      }}
-      />
-
       <Tabs.Screen name="profile"
       options={{
         tabBarIcon: ({ color, focused }) => (

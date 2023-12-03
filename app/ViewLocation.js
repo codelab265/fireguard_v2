@@ -1,4 +1,4 @@
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet, Image } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigation, useLocalSearchParams } from "expo-router";
 import MapView, {
@@ -9,11 +9,12 @@ import MapView, {
   Polyline,
 } from "react-native-maps";
 
-import { Appbar, Button, Menu } from "react-native-paper";
+import { Appbar, Button, IconButton, Menu } from "react-native-paper";
 import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
 import WindInfo from "../src/components/fireguard/WindInfo";
 import axios from "axios";
+import fireDirectionImage from "../src/assets/fire-dir.png";
 
 const ViewLocation = () => {
   const [location, setLocation] = useState(null);
@@ -35,6 +36,7 @@ const ViewLocation = () => {
   const [windDirection, setWindDirection] = useState(null);
   const [windSpeed, setWindSpeed] = useState(null);
   const [spreadDistance, setSpreadDistance] = useState(null);
+  const [areas, setAreas] = useState("");
 
   const openViewAPI = "c14e51f1f5fb7d1491352f44a1788115";
 
@@ -61,8 +63,10 @@ const ViewLocation = () => {
         const newWindSpeed = windData.speed;
 
         setWindDirection(newWindDirection);
+
         setWindSpeed(newWindSpeed);
         console.log(windData);
+        handleMapRegionChange(newWindDirection);
 
         const rateOfSpread = 5;
         const projectedTime = 3600;
@@ -97,89 +101,48 @@ const ViewLocation = () => {
     })();
   }, []);
 
-  const calculatePolygonCoordinates = () => {
-    const earthRadius = 299478139;
-    const latDelta = (spreadDistance / earthRadius) * (180 / Math.PI);
-    const lonDelta =
-      (spreadDistance /
-        (earthRadius * Math.cos((Math.PI / 180) * destination.latitude))) *
-      (180 / Math.PI);
+  const getAreaName = async (latitude, longitude) => {
+    try {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAPS_APIKEY}`
+      );
 
-    const topLeft = {
-      latitude: destination.latitude + latDelta,
-      longitude: destination.longitude - lonDelta,
-    };
-    const topRight = {
-      latitude: destination.latitude + latDelta,
-      longitude: destination.longitude + lonDelta,
-    };
-    const bottomRight = {
-      latitude: destination.latitude - latDelta,
-      longitude: destination.longitude + lonDelta,
-    };
-    const bottomLeft = {
-      latitude: destination.latitude - latDelta,
-      longitude: destination.longitude - lonDelta,
-    };
+      if (
+        response.data &&
+        response.data.results &&
+        response.data.results.length > 0
+      ) {
+        const areaDetails = response.data.results[0];
+        const areaName = areaDetails.formatted_address;
+        const coordinates = {
+          latitude: areaDetails.geometry.location.lat,
+          longitude: areaDetails.geometry.location.lng,
+        };
 
-    return [topLeft, topRight, bottomRight, bottomLeft];
+        console.log("Area Name:", areaName);
+        console.log("Coordinates:", coordinates);
+        setAreas(areaName);
+      }
+    } catch (error) {
+      console.error("Error fetching area name:", error.message);
+    }
   };
 
-  const calculateSpreadDirectionCoordinates = () => {
-    const spreadDirection = windDirection;
-    const spreadDirectionLength = spreadDistance * 2;
+  const handleMapRegionChange = (windDir) => {
+    const { latitude, longitude } = destination;
 
-    const spreadDirectionStart = {
-      latitude: destination.latitude,
-      longitude: destination.longitude,
-    };
+    // You can change the angle as needed (55 degrees in this case)
+    const direction = windDir;
 
-    const spreadDirectionEnd = {
-      latitude:
-        destination.latitude +
-        spreadDirectionLength * Math.sin((spreadDirection * Math.PI) / 180),
-      longitude:
-        destination.longitude +
-        spreadDirectionLength * Math.cos((spreadDirection * Math.PI) / 180),
-    };
+    // Calculate new coordinates based on the direction
+    const newLatitude = latitude + Math.cos((direction * Math.PI) / 180) * 0.01;
+    const newLongitude =
+      longitude + Math.sin((direction * Math.PI) / 180) * 0.01;
 
-    return [spreadDirectionStart, spreadDirectionEnd];
+    getAreaName(newLatitude, newLongitude);
   };
 
-  const calculateArrowShapeCoordinates = () => {
-    const arrowWidth = spreadDistance / 5; // Adjust the width of the arrow as needed
-    const arrowLength = spreadDistance * 2; // Adjust the length of the arrow as needed
-
-    const arrowHead = {
-      latitude:
-        destination.latitude +
-        arrowLength * Math.sin((windDirection * Math.PI) / 180),
-      longitude:
-        destination.longitude +
-        arrowLength * Math.cos((windDirection * Math.PI) / 180),
-    };
-
-    const arrowLeft = {
-      latitude:
-        arrowHead.latitude -
-        arrowWidth * Math.cos(((windDirection + 90) * Math.PI) / 180),
-      longitude:
-        arrowHead.longitude -
-        arrowWidth * Math.sin(((windDirection + 90) * Math.PI) / 180),
-    };
-
-    const arrowRight = {
-      latitude:
-        arrowHead.latitude +
-        arrowWidth * Math.cos(((windDirection + 90) * Math.PI) / 180),
-      longitude:
-        arrowHead.longitude +
-        arrowWidth * Math.sin(((windDirection + 90) * Math.PI) / 180),
-    };
-
-    return [arrowLeft, arrowHead, arrowRight];
-  };
-
+  console.log(areas);
   return (
     <View className="flex-1 relative">
       <Appbar.Header className="bg-primary">
@@ -196,13 +159,7 @@ const ViewLocation = () => {
             />
           }
         >
-          <Menu.Item
-            onPress={() => {
-              closeMenu();
-              onZoomInPress();
-            }}
-            title="Zoom"
-          />
+        
 
           <Menu.Item
             onPress={() => {
@@ -246,68 +203,42 @@ const ViewLocation = () => {
           provider={PROVIDER_GOOGLE}
           ref={map}
         >
-          <Marker coordinate={destination} pinColor="green" />
-          <Circle
-            center={destination}
-            radius={300}
-            fillColor="rgba(255, 0, 0, 0.3)"
-          />
-          <MapViewDirections
-            origin={origin}
-            destination={destination}
-            apikey={GOOGLE_MAPS_APIKEY}
-            strokeWidth={5}
-            strokeColor="green"
-          />
-
-          {windDirection !== null && (
-            <Polygon
-              coordinates={calculatePolygonCoordinates()}
-              fillColor="rgba(255, 0, 0, 0.3)"
-              strokeColor="red"
-            />
-          )}
-
-          {windDirection !== null && (
-            <Polygon
-              coordinates={calculateArrowShapeCoordinates()}
-              fillColor="rgba(255, 0, 0, 0.3)"
-              strokeColor="red"
-            />
-          )}
-
-          {/* Display wind information on the map using the WindInfo component
-          {windDirection !== null && windSpeed !== null && (
-            <View style={styles.windInfoContainer}>
-              <Text style={styles.windInfoText}>
-                Wind Direction: {windDirection}°
-              </Text>
-              <Text style={styles.windInfoText}>
-                Wind Speed: {windSpeed} m/s
-              </Text>
+          <Marker coordinate={destination} title="Fire Location" pinColor="red">
+            <View style={styles.markerContainer}>
+              {/* Rotate the arrow image based on wind direction */}
+              <Image
+                source={fireDirectionImage}
+                style={{
+                  width: 100,
+                  height: 150,
+                  transform: [{ rotate: `${windDirection}deg` }],
+                  marginBottom: 10,
+                }}
+              />
             </View>
-          )} */}
-
-          {/* Display a marker for the fire location */}
-          <Marker
-            coordinate={destination}
-            title="Fire Location"
-            pinColor="red"
-          />
-
-          {/* Display a line representing the fire spread direction */}
-          {/* {windDirection !== null && (
-            <Polyline
-              coordinates={calculateSpreadDirectionCoordinates()}
-              strokeColor="orange"
-              strokeWidth={2}
-            />
-          )} */}
+          </Marker>
         </MapView>
+      )}
+      {areas && (
+        <View className="absolute top-28 px-4 py-2 bg-white w-full mx-2">
+          <Text className="text-xl font-Poppins_600">Possible Affected Areas</Text>
+          <Text className="font-Poppins_400">{areas}</Text>
+        </View>
       )}
       {windDirection !== null && windSpeed !== null && (
         <WindInfo windDirection={windDirection} windSpeed={windSpeed} />
       )}
+      <IconButton
+      icon={'arrow-expand-all'}
+      size={24}
+      className="absolute bottom-2 right-2 bg-primary"
+      iconColor="#fff"
+      mode="contained"
+      onPress={() => {
+        closeMenu();
+        onZoomInPress();
+      }}
+      />
     </View>
   );
 };
@@ -315,6 +246,12 @@ const ViewLocation = () => {
 export default ViewLocation;
 
 const styles = StyleSheet.create({
+  markerContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingLeft: 5,
+    paddingRight: 5,
+  },
   windInfoContainer: {
     position: "absolute",
     top: 10,
